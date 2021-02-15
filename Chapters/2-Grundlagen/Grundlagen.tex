@@ -3,7 +3,30 @@
 %=========================================
 \chapter{Grundlagen}
 \label{ch:grundlagen}
-In diesem Kapitel werden einige Grundlagen erläutert, die für das Verständnis der Thesis von Nöten sind. Hierbei wird zunächst auf die Begriffe Internet-of-Things und SmartCity eingegangen. Anschließend wird das SmartCity Testfeld und die dort eingesetzten Technologien betrachtet. Ferner wird die native App-Entwicklung definiert und auf die verschiedenen Cross-Plattform-Lösungen eingegangen. Das Kapitel schließt mit einem Überblick über das Netzwerkprotokoll MQTT. 
+Um die Cloud Native Architektur zu betrachten, gilt es erst einige Grundlagen zu erarbeiten. In diesem Kapitel wird zunächst der Begriff Cloud abgegrenzt. Dabei wird auch der unterschied von \textit{Public} und \textit{Private Cloud} betrachtet. Daraus wird anschließend eine Liste von Anforderungen an eine Cloud-Architektur formuliert. Aufbauend auf dieser wird abschließend die Cloud Native Architektur definiert und deren Eigenschaften betrachtet. 
 
-\section{Internet of Things}
-Unter dem Begriff \textit{Internet of Things} (IoT) versteht man zunächst ein Kommunikations Paradigma. Objekte des alltäglichen Lebens sind heutzutage mit Mikrocontrollern und T
+\section{Die Cloud}
+Der Begriff Cloud ist heutzutage sowohl in Fachliteratur, als auch in it-fernen Bereichen vorzufinden. Dabei wird der Begriff \textit{Cloud} als Oberbegriff für neue Technologien und Produkte verwendet. Allerdings gilt es hier nicht die Produkte sondern deren Architektur zu betrachten.\\ 
+Dafür gilt es zunächst zu ermitteln, in welcher Umgebung Cloud-Applikationen betrieben werden.\\\\
+Die NIST definiert \textit{Cloud Computing}, als ein Model für allgegenwärtigen Zugriff auf eine geteilte Menge von Rechenleistung. Diese kann durch ein Service-Provider schnell bereitgestellt oder freigegeben werden. Der Kunde kann demnach flexibel Rechenleistung dazu kaufen, oder die bereitgestellte Rechenleistung verringern. Hierfür ist keine menschliche Kommunikation von Nöten. Deshalb wird dies von der NIST als \textit{On-demand self-service} bezeichnet.\\
+Um dies zu ermöglichen nutzt der Service-Provider das sogenannte \textit{Resource-Pooling}. Hierfür teilt der Service-Provider dem Kunden automatisiert Rechenleistung zu. Der Kunde hat hierbei nur begrenzt Einfluss auf den Standort oder die genaue Maschine, welche die Leistung zur Verfügung stellt.\cite{mell_nist_2011}\\
+Der Kunde bezahlt folglich Rechenleistung, und nicht einzelne Maschinen. 
+
+\subsection{Service Modelle}
+Verschiedene Geschäftsmodelle des Cloud-Computings setzen unterschiedliche Grade der Abstraktion um. Hierbei wird zwischen den Service Modellen Infrastructure as a Service, Plattform as a Service und Software as a Service unterschieden. Im Nachfolgenden werden diese Modelle voneinander abgegrenzt.
+\subsubsection{Infrastructure as a Service}
+Das sogenannte\textit{ Infrastructure as a Service (IaaS)}\cite{mell_nist_2011} stellt Speicher -und Rechenleistung zur Verfügung. Der Kunde muss also nicht selbst physische Hardware betreiben. IaaS kann als Grundschicht unter allen anderen Service Modellen gesehen werden.\\
+Mittels Virtualisierung teilt der Service-Provider die physische Hardware auf und teilt sie den Kunden zu. Der  Kunde hat also kein Einfluss auf die zugrundeliegende Infrastruktur. Allerdings kann er Aspekte wie Speicher, Betriebssystem, Middle-Ware und die Anwendung selbst konfigurieren \cite{dimpi_rani_rajiv_kumar_ranjan_comparative_2014}.\\
+Auch ein begrenzter Zugriff auf Netzwerkomponenten, wie zum Beispiel die Firewall, kann möglich sein. IaaS stellt demnach die selben Funktionen wie ein traditionelles  Rechen-Center zur Verfügung. Der Kunde muss allerdings kein solches Instandhalten und kann flexibel die Rechenleistung erhöhen oder verringern. \\
+Abgerechnet wird in der Regel entsprechend der Nutzungsdauer. In einigen Fällen übernimmt der Service-Provider auch Aufgaben wie die Systemwartung, Datensicherung und das Notfall-Management.\\
+Unter anderem sind Microsoft, IBM und Amazon Anbieter von IaaS Angeboten. \cite{simon_lohmann_iaas_nodate} \cite{mell_nist_2011}
+\subsubsection{Plattform as a Service}
+Das \textit{Plattform as a Service (PaaS)}\cite{mell_nist_2011} Model abstrahiert gegenüber IaaS weitere Aspekte der Cloud. Weiterhin muss der Kunde keine eigene Rechenzentren verwalten und erhält durch den Service Provider flexibel Rechenleistung.\\
+Allerdings werden nun auch Aspekte wie das Betriebssystem, die Speicherverwaltung mit Datenbanken und das Netzwerk, durch den Service Provider verwaltet. Der Kunde erhält eine Entwicklungsumgebung in der Cloud, über welche der die Anwendung bereitstellen kann. \\
+PaaS ist dafür konzipiert den kompletten Lebenszyklus einer Anwendung zu ermöglichen. Hierzu zählen das bauen, testen, veröffentlichen, verwalten und aktualisieren einer Anwendung \cite{dimpi_rani_rajiv_kumar_ranjan_comparative_2014}. Auf einer höheren Abstraktion kommen neben Entwicklungswerkzeugen, Programmiersprachen, Bibliotheken und Datenbanken auch Container-Techniken dazu.\\
+Zu den wichtigsten PaaS Anbietern gehören Amazon, IBM und Microsoft. \cite{simon_lohmann_platform_nodate}\cite{sowmya_layers_2014} \cite{mell_nist_2011} 
+\subsubsection{Software as a Service}
+\textit{Software as a Service (SaaS)} ist die am meisten abstrahierte Form des Cloud-Computings. Kunden können über das Internet auf Angebote zugreifen, welche von einem Service-Provider zur Verfügung gestellt werden. Die Applikation wird durch den Service-Provider verwaltet, betrieben und aktualisiert. \\
+Der Nutzer verwaltet keinen Aspekte der zugrundeliegenden Infrastruktur. Einzig eine konfigurieren der Anwendung selbst kann möglich sein.\\
+Typische SaaS-Applikationen im Business Bereich sind \textit{Google G Suite} \cite{noauthor_google_nodate}  und \textit{Microsoft Office 365} \cite{noauthor_office_nodate}. \\
+SaaS-Provider rechnen Anwendungen in der Regen anhand bestimmter Parameter, wie die Anzahl der Nutzer, ab. Auch bei SaaS-Angeboten können Kunden bei Bedarf einzelne Dienste oder Funktionen stärker in Anspruch nehmen. \cite{wolfgang_herrmann_saas_nodate} \cite{sowmya_layers_2014} \cite{mell_nist_2011}
