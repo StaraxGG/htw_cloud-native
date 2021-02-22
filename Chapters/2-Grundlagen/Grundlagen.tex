@@ -61,14 +61,11 @@ Zusammenfassend lässt sich sagen, dass Entwickler und Software-Architekten drei
 
 \section{Prinzipien einer Cloud Native Architektur}
 Nachdem nun der Begriff Cloud-Computing und Cloud-Applikationen beleuchtet wurde, kann eine Architektur für die Cloud betrachtet werden. Das Ziel dieser ist, die Möglichkeiten der Cloud maximal zu Nutzen. Traditionelle Infrastrukturen (on-premise) fokussieren sich auf eine feste Anzahl an Hardware-Komponenten und deren Elastizität sowie Leistung. Der Cloud-Service-Provider teilt diese flexibel zu. Folglich nutzen Cloud-Native Architekturen Prinzipien, wie das horizontale Skalieren und automatische Ersetzen von abgestürzten Komponenten um Leistung und Elastizität zu bereit zu stellen.\\
-Sowohl Scholl et Al. , als auch Microsoft, Amazon und Google definieren eine Vielzahl von Eigenschaften einer Cloud-Native Architektur. Im Folgenden werden die prominentesten dieser erläutert. 
+Sowohl Scholl et Al.\cite{scholl_cloud_2019} , als auch Microsoft, Amazon und Google definieren eine Vielzahl von Eigenschaften einer Cloud-Native Architektur. Im Folgenden werden die prominentesten dieser erläutert. 
 \subsection{Designed für die Automatisierung}
-Eines der Ziele einer Cloud-Native Architektur ist es, so viele Aspekte des Systems wie möglich zu automatisieren. Scholl et Al. bezeichnet diese Eigenschaft als *Operational Excellence*. Ganz natürlich kommt hier das Continuous Integration / Continuous Delivery (CI/CD) ins Spiel. CI/CD beschreibt das automatisierte bauen, testen und deployen des Systems. Auch das Zurücksetzen von Updates (Rollback) sollte automatisiert werden.
-
-All diese Aktivitäten sollten stets geloggt werden. Letzteres sollte daher von Anfang an in die Cloud Native Anwendung integriert werden. 
-
-Eine Überwachung der Anwendung sollte ebenfalls Implementiert werden. Diese führt dazu, dass Fehler frühzeitig erkannt werden können. Darüber hinaus hat diese von weitere Vorteile.
-
+Eines der Ziele einer Cloud-Native Architektur ist es, so viele Aspekte des Systems wie möglich zu automatisieren. Scholl et Al.\cite{scholl_cloud_2019} bezeichnet diese Eigenschaft als ''Operational Excellence''. Ganz natürlich kommt hier das Continuous Integration / Continuous Delivery (CI/CD) ins Spiel. CI/CD beschreibt das automatisierte bauen, testen und deployen des Systems. Auch das Zurücksetzen von Updates (Rollback) sollte automatisiert werden.\\
+All diese Aktivitäten sollten stets geloggt werden. Letzteres sollte daher von Anfang an in die Cloud Native Anwendung integriert werden. \\
+Eine Überwachung der Anwendung sollte ebenfalls Implementiert werden. Diese führt dazu, dass Fehler frühzeitig erkannt werden können. Darüber hinaus hat diese von weitere Vorteile.\\
 Aspekte der Cloud wie das on-demmand-self-service ermöglichen es, im Code der Anwendung selbst, die Umgebung der Anwendung anzupassen. So kann ein System sich selbst neue Ressourcen buchen und anwenden. Ein Beispiel wäre hier die Speicherplatzüberwachung. Ist eine Speichereinheit ausgelastet, müsste eine on-premise Deployment Modell auf physische Hardware-Erweiterung warten. Durch das Cloud-Computing kann nun die Software selbst neue Ressourcen buchen. Dies ist führt zu weniger Down-Time und reduziert die Aufgabe von Personal. Grund-Voraussetzung dafür ist eine planvolle Automatisierung und Überwachung.\\ 
 Ein weiterer Punkt auf den Eingegangen werden soll, ist das Fehler passieren werden. Eine Cloud-Native-Applikation ist eine verteiltes System. Dadurch ergeben sich neue Fehler-Quellen. Diese sind oft schwer zu testen. Eine Cloud-Native Architektur sollte auch auf diese automatisiert reagieren.\\
 Weiterhin lässt sich das Skalieren des Systems automatisieren. Durch das herauf Skalieren bleibt das System weiter erreichbar, und durch das herunter Skalieren werden die Kosten reduziert.\\
@@ -95,8 +92,15 @@ Als Nachteile der Micro-Service Architektur ergibt sich zunächst eine höere Ko
 Container verpacken eine Software mit all ihren Konfigurationen und Abhängigkeiten, wodurch die Applikation zuverlässig und schnell in unterschiedlichen Umgebungen betrieben werden kann.\\
 Es genügt einen Container zu starten. Dabei ist die Ausführung der Software nicht von dem Betriebssystem abhängig, welches den Container startet.\\
 Dies eliminiert typische CI/CD Fehlerquellen. In einem CI/CD Prozess wird die Software meist durch unterschiedliche Teams entwickelt und getestet. Dabei können Fehler entstehen, welche einzig durch unterschiedliche Konfiguration der Entwicklung und Test-Systeme bedingt sind. Diese Variable lässt sich mit Containern eliminieren.\\
-Das selbe vorgehen wurde zuvor mit Virtuellen Maschinen umgesetzt. Dies führt allerdings zu einigen Nachteilen. Virtuelle Maschinen beanspruchen viel Speicherplatz und starten Langsam. Container beheben dies, indem Konstanten wie der Betriebssystem-Kernel unter den Containern geteilt wird. Infolgedessen wird die Isolation zwischen den Containern reduziert. Dies verschlechtert die Sicherheit, welche an anderer Stelle erneut verbessert werden muss. Der Anspruch von Containern ist allerdings nicht die Sicherheit zu erhöhen. Der Vorteil von Containern besteht darin, dass sie unabhängig von der Infrastruktur immer gleich funktionieren werden. Für eine Cloud-Native-Applikation ist dies von Vorteil. Das schnelle starten von Containern führt dazu, dass fehlerhafte Container schnell ersetzt werden können. Auch das horizontale Skalieren ist dadurch schneller umsetzbar. Darüberhinaus werden Fehler-Quellen durch den Service-Provider reduziert. Denn Abhängigkeiten zu konfigurationen der durch den Service-Provider zur Verfügung gestellten Hardware wird reduziert.\\
+Das selbe vorgehen wurde zuvor mit Virtuellen Maschinen umgesetzt. Dies führt allerdings zu einigen Nachteilen. Virtuelle Maschinen beanspruchen viel Speicherplatz und starten Langsam. Container beheben dies, indem Konstanten wie der Betriebssystem-Kernel unter den Containern geteilt wird. Infolgedessen wird die Isolation zwischen den Containern reduziert. Die Abbildung \ref{fig:vm-vs-container} grenzt Virtuelle Maschinen von Containern ab. Container verschlechtern durch die fehlende Isolation die Sicherheit gegenüber Virtuellen Maschinen. Die Sicherheit muss demnach an anderer Stelle erneut verbessert werden. Der Anspruch von Containern ist nicht die Sicherheit zu erhöhen. Der Vorteil von Containern besteht darin, dass sie unabhängig von der Infrastruktur immer gleich funktionieren werden. Für eine Cloud-Native-Applikation ist dies von Vorteil. Das schnelle starten von Containern führt dazu, dass fehlerhafte Container schnell ersetzt werden können. Auch das horizontale Skalieren ist dadurch schneller umsetzbar. Darüber hinaus werden Fehler-Quellen durch den Service-Provider reduziert. Denn Abhängigkeiten zu Konfigurationen der durch den Service-Provider zur Verfügung gestellten Hardware wird reduziert.\\
 Das Arbeiten mit Containern kann unter anderem durch Docker realisiert werden. 
+
+\begin{figure}[bth] 
+  \centering
+  \includegraphics[width=0.7\textwidth]{Chapters/2-Grundlagen/Graphics/container-vs-vm.png}
+  \caption{Abgrenzung von Container und Virtueller Maschine \cite{scholl_cloud_2019}}
+  \label{fig:vm-vs-container}
+\end{figure}
 
 \subsection{Service-Meshes}
 Um die Vorteile und Eigenschaften eines Service-Meshes zu betrachten, muss zunächst der Begriff Container-Orchestration abgegrenzt werden.
@@ -105,9 +109,7 @@ Werden die Services einer Micro-Service-Architektur in Containern betrieben, kö
 Für eine Cloud-Native Architektur ist dies von Vorteil. Denn Container lassen sich mit minimaler Verzögerung starten und stoppen. Zudem können wir horizontal skalieren, indem wir weitere Container starten. Allerdings ergeben sich dadurch einige Probleme. Zunächst ein Mal müssten Container automatisch gestartet, gestoppt und neu gestartet werden. Die Skalierung des Systems, oder im Fehlerfall das Neu starten von Containern darf keine menschliches Aufgabe sein. Denn dies wäre zwangsläufig mit einer zu großen Verzögerung verbunden.\\
 Um diese Verzögerung weiter zu reduzieren, könnten bereits Ersatz-Container vorgehalten werden. Im Fehlerfall oder für die Skalierung würde ein Umleiten des Traffics genügen. Dies erfordert ein automatisiertes Load-Balancing.\\
 Ein funktionierendes Load-Balancing ist auch für die Container zu Container Kommunikation notwendig. Wird ein Service durch mehrere Container umgesetzt, gilt es zu definieren, welcher dieser Container adressiert werden soll. Dieses Problem wird als internal Load-Balancing bezeichnet. \\\\
-
-Die Container Orchestration behebt diese Probleme.\\
-Der Container-Orchestrator liegt als eine Schicht über den Containern. Er ist verantwortlich für das starten und stoppen von Containern. Außerdem teilt er flexibel Rechenleistung zu und skaliert das System passend zum bestehenden Traffic.\\
+Die Container Orchestration behebt diese Probleme. Der Container-Orchestrator liegt als eine Schicht über den Containern. Er ist verantwortlich für das starten und stoppen von Containern. Außerdem teilt er flexibel Rechenleistung zu und skaliert das System passend zum bestehenden Traffic.\\
 Stehen mehrere Server zur Verfügung, platziert er neue Container auf den Servern mit der niedrigsten Auslastung. Außerdem verschiebt er Container, sollte die Auslastung zunehmen. Auch andere Metriken sind für die Server Auswahl und die Verschiebung der Container möglich.\\
 Der Container-Orchestrator überwacht zudem die Gesundheit der Container. Falls nötig startet er diese neu.\\
 Abschließend ist er für das interne und externe Load-Balancing verantwortlich. Realisieren mehrere Container den selben Service, leitet der Load-Balancer den Traffic zu dem geeignetsten Container weiter. \\
@@ -117,6 +119,16 @@ Scholl et Al.\cite{scholl_cloud_2019} sieht in Google Kubernetes die populärste
 Durch die Aufteilung unserer Anwendung in Micro-Services haben wir die Komplexität der einzelnen Bestandteile unserer Architektur reduziert. Man sollte allerdings bedenken, dass gleichzeitg die Komplexität auf dem System-Level zugenommen hat. Jeder Service einer Micro-Service Architektur wird, neben der Business Logik, unter anderem folgendes enthalten:
 \begin{itemize}
     \item Jede Service wird eine Retry-Logik umsetzen. Es ist möglich, dass Services nicht erreichbar sind. Ist dies der Fall, muss definiert werden, wie oft eine Verbindungsversuch unternommen wird. Ferner ist eine Ausnahmebehandlung zu ergänzen.
-    \item
-    
+    \item Darüber hinaus ist die Umsetzung der Sicherheit zu beachten. Eine Firewall kann die Anwendung von außen Schützen. Allerdings gilt es das Konzept der in-depth Security umzusetzen. Diese verlangt, dass auch die Kommunikation unter den Containern abgesichert ist. Ferner sollte nicht jeder Container frei mit jedem anderen Container kommunizieren dürfen.
+    \item Abschließend ist für die Automatisierung einer Überwachung unumgänglich. Es gilt Metriken zu erfassen und auf Basis dessen zu Handeln. Logger und Logik zum Fehlerfinden müssen ebenfalls in jedem Service integriert werden.
 \end{itemize}
+Ein Vorteil der Microservice-Architektur war es, dass jedes Team einen klar getrennten Anteil der Anwendung entwickelt. Allerdings muss jedes Team, neben der eigentlichen Business Logik, die zuvor genannten Funktionen entwickeln, verwalten und konfigurieren. Diese Konfiguration kann nicht individuell für jeden Service statt finden, ohne zu Fehlern und Problem zu führen. Außerdem wird die Fehlersuche deutlich erschwert. Eine isolation von Fehlern in einem einzigen Service ist nicht mehr zwangsläufig sichergestellt.
+
+\subsubsection{Vorgehensweise von Service-Meshes}
+Service Meshes nutzen einen sogenannten Sidecar-Proxy. Dieser wird in Abbildung \ref{fig:service-mesh} dargestellt. Jedem Container wird ein weiterer Container hinzugefügt. Dieser fungiert als Proxy. Er nimmt demnach Verbindungen an und leitet sie zu dem eigentlichen Service weiter. Diese Side-Car-Proxys werden durch die Control-Plane verwaltet und in die einzelnen Services injiziert. Ein neuer Service muss demnach die zuvor genannten Probleme, wie Sicherheit oder die Retry-Logic nicht erneut umsetzen. Außerdem ist die Control-Plane eine zentrale Schnittstelle um die gesamte Anwendung zu konfigurieren und zu Überwachen. Neben den genannten Funktionen, kann ein Service-Mesh auch weitere Aspekte, wie zum Beispiel das Load-Balancing, lösen. Meist wird an dieser stelle aber auf einem Container-Orchestrator wie Kubernetes aufgebaut. Eine mögliches Service-Mesh wäre zum Beispiel Istio. 
+\begin{figure}[bth] 
+  \centering
+  \includegraphics[width=0.7\textwidth]{Chapters/2-Grundlagen/Graphics/service-meshes.png}
+  \caption{Service-Meshes am Beispiel Istio \cite{codingwithnana_istio_nodate}}
+  \label{fig:service-mesh}
+\end{figure}
