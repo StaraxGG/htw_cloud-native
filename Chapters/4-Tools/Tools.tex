@@ -3,10 +3,95 @@
 %=========================================
 \chapter{Tools und Industriestandards}
 \label{ch:tools}
+In diesem Kapitel werden die Tools und Industriestandards betrachtet, welche für das Umsetzen der in Kapitel 2.4 vorgestellten Cloud-Native Technologien zum Einsatz kommen. In der Praxis gibt es viele verschiedene Projekte und Ansätze, Container sowie Container-Orchestrator zu realisieren, die jeweils eigene Vor- und Nachteile mit sich bringen. Zusätzlich existiert heutzutage eine Vielzahl an Cloud-Anbietern, welche ihre Hardwareressourcen für das Aufsetzen von Cloud-Native Anwendungen zur Verfügung stellen und dazu diverse Dienste für das einfachere Betreiben dieser anbieten.
+\\\\
+Im Folgenden werden die am häufigsten verwendeten Tools und Industriestandards vorgestellt und anschließend ein Überblick darüber verschafft, in welchen Industrien und Branchen Cloud-Native Anwendungen eingesetzt werden.
+
 \section{Container Runtime Environments}
-...
-\section{Container Orchestrator / Scheduler}
-...
+Von Vielen wird der Begriff „Container“ schnell mit Docker assoziiert. Hierbei handelt es sich jedoch bei weitem nicht um das einzige Projekt, welches das Konzept der Containervirtualisierung realisiert. Neben dieser wohl bekanntesten Container Runtime von Docker Inc. gibt es eine Vielzahl an weiteren Tools, welche ebenfalls die Möglichkeit bieten, Applikationen in Containern zu isolieren.
+\\\\
+Bevor wir die verschiedenen Container Runtimes genauer betrachten, muss zunächst definiert werden, was man unter einer Container Runtime versteht.
+
+\subsection{Container Runtime}
+Eine Container Runtime hat Ähnlichkeiten zu der Runtime einer gewöhnlichen Software-Applikation. Es handelt sich hierbei um Software, welche die einzelnen Komponenten, die für das Starten eines Containers benötigt werden, verwaltet und dafür sorgt, dass diese funktionsfähig sind \cite{evan_baker_comprehensive_2021}. Sie ermöglicht, dass der Nutzer sich nicht selbst um das Management dieser Komponenten kümmern muss, wodurch das Arbeiten mit Containern und deren Deployment effizienter durchgeführt werden können.
+
+\subsection{Linux Control Groups (cgroups)}
+Im Jahr 2007 wurden in den Linux Kernel sogenannte cgroups (Linux Control Groups) integriert \cite{evan_baker_comprehensive_2021}. Hierbei handelt es sich um ein Linux Kernel Feature, welches ermöglicht, Prozesse in hierarchischen Gruppen zu organisieren, deren Nutzung von verschiedenen Ressourcen limitiert und überwacht werden kann \cite{noauthor_cgroups_2021}.\\
+Auf Basis dieses neuen Features wurden anschließend einige erste Projekte ins Leben gerufen, welche containerisierte Prozesse ausführten konnten. Hierzu zählen unter anderem LXC, LMCTFY, systemd-nspawn oder rkt \cite{evan_baker_comprehensive_2021}.
+
+\subsection{Linux Containers (LXC / LXD)}
+LXC, kurz für Linux Containers, wurde kurz nach cgroups vorgestellt und befindet sich seit 2008 in Entwicklung \cite{noauthor_lxc_2021}. Das Projekt wurde hauptsächlich in C, Shell und Python geschrieben, und verwendet ein eigenes Containerformat namens Linux-Containers. Der Fokus von LXC liegt auf sogenannten Full-System-Containers \cite{noauthor_lxc_2021}. Hierbei handelt es sich um Container, die darauf abzielen, ein gesamtes Betriebssystem zu virtualisieren. Diese Art von Containern ist für Cloud-Anwendungen eher ungeeignet, da hier kein ganzes Betriebssystem virtualisiert werden muss, sondern lediglich ein einzelner Prozess abgekapselt ausgeführt werden soll.\\\\
+LXC hat später mit LXD (Lexdi) noch ein Folgeprojekt erhalten, welches ebenfalls auf Full-System-Container spezialisiert ist. Letztendlich hat sich LXC aber, ebenso wie der Ansatz von systemd, systemd-nspawn, nie bei den Endnutzern durchgesetzt. Sie wurden jedoch von anderen Systemen verwendet. Docker wurde beispielsweise teilweise auf Basis von LXC gebaut \cite{evan_baker_comprehensive_2021}.
+
+\subsection{LMCTFY (Let Me Contain That For You)}
+LMCTFY (Let Me Contain That For You) war ein frühes Container-Projekt von Google, welches zum Großteil in C++ geschrieben ist. Der Fokus lag hierbei darauf, ähnlich wie bei Docker, einzelne Applikationen innerhalb eines Containers isoliert auszuführen. Das Projekt ist Open Source, wurde jedoch eingestellt als Docker zunehmend an Popularität gewann \cite{noauthor_lmctfy_2021}.
+
+\subsection{Docker}
+Docker ist wohl das bekannteste Projekt für Containervirtualisierung. Es wurde zu Beginn unter dem Namen dotCloud entwickelt und verwendete zunächst LXC als Basis. Nach kurzer Zeit gründete Docker zusammen mit einigen anderen Unternehmen die Open Container Initiative (OCI), um einige Standards für Containertechnologien zu definieren, worauf hin LXC durch eine eigens entwickelte Schnittstelle namens libcontainer ersetzt wurde \cite{evan_baker_comprehensive_2021}.
+\\\\
+Docker wird von vielen mit dem Begriff Containervirtualisierung gleichgesetzt und bietet neben einer Container Runtime viele weitere Features. Die hauseigene Container Runtime unterstützt Container in einem eigens von Docker entwickelten Format (Docker-Container). Das Tool ist in Go geschrieben und wird von Docker Inc. entwickelt. Docker unterstützt keine Full-System-Container und fokussiert sich auf die Isolierung einzelner Applikationen, wodurch es für die Verwendung bei Microservices und Cloud-Native-Architekturen geeignet ist.
+\\\\
+Das Docker-Tool beinhaltet neben dem Starten eines Containers viele weitere Features, wie beispielsweise das automatische Erstellen von Images, auf dessen Basis dann ein Container erstellt werden kann, oder das Hochladen eines solchen Images in das sogenannte Docker Hub. Hierbei handelt es sich um eine große Sammlung von Docker-Images, welche gratis verwendet werden können. Fast alle großen IT-Projekte, wie beispielsweise bekannte Datenbanken wie MySQL oder Redis, sind hier mit einem Docker-Image vertreten \cite{noauthor_dockerhub_2021}. Mit Hilfe des Docker-Tools kann man durch ein einfaches Ausführen von „docker run“ auf das jeweilige Image sofort einen Container auf dessen Basis erstellen, wobei Docker alle benötigten Abhängigkeiten automatisch herunterlädt. Somit können all diese Tools ohne eine komplizierte Installation sofort verwendet werden. Als Nutzer hat man zusätzlich die Möglichkeit, seine eigenen Images gratis auf Docker Hub hochzuladen, in private oder öffentliche Registries. Auf öffentliche Registries haben dann auch andere Nutzer Zugriff und können diese Images verwenden. Dabei bietet Docker Hub zusätzlich eine Versionierung von Images, indem diese mit einem Versions-Tag versehen werden können.
+\\\\
+Des Weiteren bietet Docker mit Docker-Compose ein Tool zum Starten von mehreren Containern gleichzeitig, wobei Abhängigkeiten und Verbindungen zwischen diesen realisiert und berücksichtigt werden können. Zusätzlich gibt es mit Docker Swarm ein hauseigenes Orchestrierungs-Tool. Docker ist somit ein leicht zu bedienendes All-In-One Werkzeug für Containervirtualisierung.
+\\\\
+Diese Einfachheit hat stark zu der heutigen Beliebtheit von Docker beigetragen. Außerdem wird Docker von vielen Cloud-Anbietern und Container-Orchestratoren unterstützt.
+
+\subsection{rkt („Rocket“)}
+Mit rkt („Rocket“) wurde von den Entwicklern der Linux Distribution CoreOS eine Alternative für Docker entwickelt. Auch hier wurde als Programmiersprache Go verwendet \cite{noauthor_rkt_2021}. Zur damaligen Zeit enthielt rkt einige Features, welche Docker und anderen Container Runtimes überlegen waren. Beispielsweise war es bei rkt nicht notwendig, alle Prozesse als root zu starten \cite{evan_baker_comprehensive_2021}. Außerdem unterstützt rkt neben ihrem eigenen Containerformat auch weitere Formate, unter anderem Docker-Container.
+\\\\
+CoreOS hat zunächst mit appc einen eigenen Container-Standard veröffentlicht, hat sich jedoch später bei der Gründung der Open Container Initiative dieser als Gründungsmitglied angeschlossen \cite{evan_baker_comprehensive_2021}. Daraufhin war rkt eine Zeit lang der größte Konkurrent von Docker. Nachdem letzteres jedoch immer mehr an Popularität gewann, wurde rkt letztendlich 2020 eingestellt und wird aktuell nicht mehr aktiv weiterentwickelt \cite{noauthor_rkt_2021}.
+
+\subsection{Podman}
+Podman steht für Pod Manager und ist eine von Redhat entwickelte Docker Alternative. Der Fokus liegt hierbei, wie der Name bereits andeutet, auf sogenannten Pods. Hierbei handelt es sich um eine Abstraktion über einem Container oder mehreren Containern, die sich gewisse Ressourcen teilen. Der Begriff stammt aus dem Kubernetes-Umfeld.
+\\\\
+Podman ist in Go geschrieben \cite{noauthor_podman_2021}. Redhat kritisiert an Docker, dass es mit der Docker Engine ein All-In-One-Tool für Containervirtualisierung bietet. Man möchte mit Podman die UNIX-Philosophie verfolgen, welche besagt, dass ein Programm immer eine Aufgabe erledigen soll. Somit wird Podman nur für das Starten und Managen von Containern bzw. Pods verwendet, nicht aber beispielsweise für das Bauen von Images. Hierfür gibt es wiederum ein eigenes Tool, welches sich darauf spezialisiert, wie zum Beispiel buildah. \cite{evan_baker_comprehensive_2021}.
+
+\subsection{Open Container Initiative Runtimes}
+Wie bereits erwähnt haben sich einige Unternehmen zusammengeschlossen und die Open Container Initiative gegründet. Die hierbei entstandenen Spezifikationen beschreiben eine sogenannte Low-Level-Runtime. Dies bedeutet, die Runtimes fokussieren sich auf das Management des Lebenzyklus von Containern und müssen sich ansonsten um nichts weiteres kümmern \cite{evan_baker_comprehensive_2021}. Sie werden somit meist nicht vom End-User direkt verwendet, sondern sind in eine andere High-Level-Container-Software, wie beispielsweise Docker, eingebettet.
+\\\\
+Die bekannteste Low-Level-Runtime ist runC. Hierbei handelt es sich um die OCI Runtime von Docker, welche im Rahmen von libcontainer entstanden ist. Das Projekt ist in Go geschrieben und Open Source verfügbar \cite{evan_baker_comprehensive_2021}.
+\\\\
+Oracle hatte mit Railcar eine Alternative zu runC ins Leben gerufen, welche ebenfalls auf die Spezifikationen der OCI aufsetzt. Als Programmiersprache wurde Rust gewählt, welche sich ebenso wie Go als sehr geeignet für Containervirtualisierung herausstellte. Trotzdem wurde das Projekt später eingestellt \cite{evan_baker_comprehensive_2021}.
+
+\subsection{Open Container Initiative Runtimes}
+Wie bereits erwähnt haben sich einige Unternehmen zusammengeschlossen und die Open Container Initiative gegründet. Die hierbei entstandenen Spezifikationen beschreiben eine sogenannte Low-Level-Runtime. Dies bedeutet, die Runtimes fokussieren sich auf das Management des Lebenzyklus von Containern und müssen sich ansonsten um nichts weiteres kümmern \cite{evan_baker_comprehensive_2021}. Sie werden somit meist nicht vom End-User direkt verwendet, sondern sind in eine andere High-Level-Container-Software, wie beispielsweise Docker, eingebettet.
+\\\\
+Die bekannteste Low-Level-Runtime ist runC. Hierbei handelt es sich um die OCI Runtime von Docker, welche im Rahmen von libcontainer entstanden ist. Das Projekt ist in Go geschrieben und Open Source verfügbar \cite{evan_baker_comprehensive_2021}.
+\\\\
+Oracle hatte mit Railcar eine Alternative zu runC ins Leben gerufen, welche ebenfalls auf die Spezifikationen der OCI aufsetzt. Als Programmiersprache wurde Rust gewählt, welche sich ebenso wie Go als sehr geeignet für Containervirtualisierung herausstellte. Trotzdem wurde das Projekt später eingestellt \cite{evan_baker_comprehensive_2021}.
+\\\\
+Auch Redhat hat eine eigene Implementation der OCI Spezifikationen entwickelt. Die Runtime heißt crun und wurde in C geschrieben. Laut dem offiziellen GitHub Repository ist crun schneller als runC und benötigt weniger Ressourcen. Man hat sich bewusst für C als Programmiersprache entschieden, da C leichtgewichtiger als Go ist und die in Go geschrieben Runtimes meist selbst auf C-Module zugreifen, um ihre Container zu starten \cite{noauthor_crun_2021}.
+
+\subsection{Kubernetes Container Runtime Interface (CRI)}
+Kubernetes hat als bekanntester Container Orchestrator mit dem Release von Kubernetes 1.5 das Container Runtime Interface eingeführt. Hierbei handelt es sich um ein Plugin-Interface, welches Kubernetes ermöglicht verschiedene Container-Runtimes zu verwenden, indem sie dieses Interface implementieren \cite{noauthor_cri_2021}. Das CRI erweitert die von der OCI definierten Spezifikationen um einige für die Orchestrierung relevanten Funktionalitäten.
+\\\\
+Eine Implementation des CRI ist containerd. Es handelt sich dabei um die High-Level-Runtime von Docker, welche als Low-Level-Runtime standardmäßig runC verwendet \cite{evan_baker_comprehensive_2021}. Das Projekt wurde wie Docker in Go geschrieben und unter einer Open-Source Lizens losgelöst von Docker auf GitHub veröffentlicht \cite{noauthor_containerd_2021}.
+\\\\
+Mit CRI-O hat auch Redhat eine Implementation des CRI veröffentlicht. CRI-O soll als Brücke zwischen dem CRI und OCI Runtimes fungieren und ermöglicht das Einbinden von allen OCI Runtimes in Kubernetes und ist dabei leichtgewichtiger als Docker \cite{noauthor_cri-o_2021}.
+
+\section{Container Orchestrator}
+Auch für die Container Orchestrierung gibt es einige verschiedene Produkte auf dem Markt. Das bereits erwähnte Kubernetes ist das am häufigsten eingesetzte Tool und hat sich mittlerweile als Industriestandard durchgesetzt. Es existieren jedoch noch weitere Projekte, von denen einige in diesem Kapitel vorgestellt werden.
+
+\subsection{Kubernetes}
+Kubernetes ist ein Open-Source Container-Orchestrator. Das Projekt wurde von Google entwickelt und 2014 erstmals veröffentlicht \cite{noauthor_kubernetes_2021}. Wie bei Docker wurde auch hier Go als Programmiersprache gewählt. Oftmals wird Kubernetes mit k8s abgekürzt, wobei die “8” hierbei für die Anzahl der Buchstaben zwischen “K” und “s” steht.
+\\\\
+Kubernetes hat sich mit der Zeit gegen andere Container Orchestrator durchgesetzt und wird aktuell als der Standard für Container-Orchestration angesehen. Wie bereits erwähnt wurde ein eigenes Container Runtime Interface (CRI) definiert, durch welches Kubernetes alle größeren Container Runtimes unterstützt. Außerdem haben alle großen Cloud-Anbieter wie Amazon oder Google Kubernetes-Support. Oftmals bieten diese auch eigene sogenannte Managed Kubernetes Services an. Hierbei handelt es sich um von den Cloud-Anbietern eigens entwickelte Schnittstellen für das Arbeiten mit Kubernetes, welche dieses oftmals erleichtern und für die jeweilige Cloud-Plattform zugeschnitten sind.
+
+\subsection{Docker Swarm}
+Docker beinhaltet mit Docker Swarm, oftmals auch als Swarm Mode bezeichnet, ein hauseigenes Orchestrierungstool. Es ist Teil der Docker Engine und ist direkt in die Docker CLI eingebunden. Man benötigt somit keine zusätzliche Orchestrierungssoftware, wenn man bereits Docker installiert hat \cite{noauthor_dockerswarm_2021}.
+\\\\
+Docker Swarm ist verglichen mit Kubernetes deutlich einfacher zu bedienen. Kubernetes ist viel komplexer und bietet mehr Konfigurationsmöglichkeiten. Trotzdem sind die Grundfunktionalitäten eines Container Orchestrators alle in Docker Swarm enthalten. Docker bietet somit einen leicht zu bedienden Container Orchestrator und vereinfacht die Orchetration für den Nutzer, wenn die Komplexität von Kubernetes nicht benötigt wird. Docker Swarm beinhaltet beispielsweise von Haus aus kein Monitoring seiner Services., während Kubernetes dies automatisch macht. Außerdem ist Docker Swarm ist nur mit Docker-Containern kompatibel, wobei Kubernetes neben Docker auch andere Container-Formate untersützt.
+
+\subsection{Docker Compose}
+Docker bietet neben dem Swarm Mode mit Docker Compose ein weiteres Tool, über welches man Applikationen bestehend aus mehreren Containern realisieren kann. Hierbei handelt es sich aber nicht um eine vollwertigen Container Orchestrator. Man kann mit Docker Compose mehrere Container über ein virtuelles Netzwerk miteinander verbinden und diese somit miteinander kommunizieren lassen. Es ist aber keine Verteilung auf mehrere Nodes möglich. Dafür ist die Konfiguration von Docker Compose sehr einfach. Es eignet sich somit beispielsweise für das lokale Testen einer Cloud Anwendung.
+
+\subsection{Fleet}
+Fleet ist ein ehemaliges Projekt von CoreOS. Es wurde in Go entwickelt und unter einer Open Source Lizenz veröffentlicht \cite{noauthor_fleet_2021}. Fleet basiert auf systemd und etcd, einem Key-Value-Store für verteilte Systeme \cite{noauthor_etcd_2021}. Mittlerweile wurde das Projekt eingestellt und CoreOS empfiehlt Kubernetes als Container Orchestrator \cite{noauthor_fleet_2021}.
+
+\subsection{Apache Mesos}
+Apache Mesos ist ein Open Source Cluster-Manager. Im Gegensatz zu den anderen Orchestratoren kann Apache Mesos nicht nur Container orchestrieren, sondern kann generell für das Verwalten von Anwendungen auf einem Cluster eingesetzt werden. Das Framework Marathon ist Teil von Apache Mesos und ist für die Container-Orchestration zuständig. Marathon ist in Scala geschrieben und bietet eine REST-Schnittstelle, über welche das Cluster verwaltet werden kann \cite{noauthor_marathon_2021}. Es werden Container in einem eigenen Mesos-Container-Format sowie Docker-Container unterstützt \cite{noauthor_mesosphere_2021}.
+
 \section{Managed Kubernetes Services}
 ...
 \section{Nutzung in der Industrie}

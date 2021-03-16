@@ -3,4 +3,36 @@
 %=========================================
 \chapter{Fallstudie}
 \label{ch:fallstudie}
-Im vorherigen Kapitel wurde auf den Aufbau der Lösung eingegangen. Hierbei wurden die einzelnen Komponenten der Lösung betrachtet. In diesem Kapitel wird zunächst auf die benötigten Pakete eingegangen und deren Verwendung erläutert. Anschließend wird die  Umsetzung der Erweiterbarkeit vorgestellt und abschließend die Umsetzung des \lstinline{GarbageService}.
+In den vorherigen Kapiteln wurde auf das Architekturmuster Cloud-Native und dessen Eigenschaften eingegangen. Ferner wurden Technologien vorgestellt, welche bei der Umsetzung einer Cloud-Native-Architektur unterstützen. In diesem Kapitel wird eine Fallstudie betrachtet. Anschließend wird für die Fallstudie eine Cloud-Native Architektur vorgestellt und evaluiert.
+
+\section{Vorstellung der Fallstudie}
+\section{Anforderungen}
+\section{Konzeption}
+\section{Umsetzung}
+\section{Evaluation}
+Abschließend gilt es zu betrachten, auf welche Probleme wir während der Umsetzung gestoßen sind. Hier muss angemerkt werden, dass die Umsetzung in einem engen Zeitrahmen statt gefunden hat. Jedes der gezeigten Konzepte kann noch weiter ausgearbeitet werden. Ferner wird jedes der gezeigten Konzepte exponentiell komplexer, sollte die Anwendung in einer realistischen Umgebung eingesetzt werden. Einige dieser Aspekte werden in den folgenden Abschnitten erläutert. Zunächst gilt es allerdings zu analysieren, was unsere Anwendung bereits im aktuellen Zustand problemlos umsetzen kann.\\
+\\
+Im Kapitel Konzeption wurden die einzelnen Komponenten unser Anwendung gezeigt. Jede dieser Komponenten stellt ein eigenes Kubernetes Deployment dar. Dies ermöglicht es jede dieser Komponenten zu skalieren. Die Kommunikation der Komponenten untereinander ist weiterhin problemlos möglich. Ferner werden Nutzeranfragen auf die verschiedenen Instanzen der Benutzerschnittstellen verteilt. Von außen ist nicht ersichtlich, dass mehrere Instanzen der Komponenten betrieben werden. Unsere Anwendung könnte demnach auf einem Kubernetes Cluster betrieben werden. Stellt dieses genügen Rechen-Ressourcen bereit kann eine beliebige Anzahl an Nutzern die Anwendung nutzen. Hierbei ergeben sich Einschränkungen und Probleme. Diese werden in den nächsten Abschnitten näher beleuchtet.
+\subsection{Umgang mit State}
+Im Kapitel Konzeption wurde bereits klar, dass der \lstinline{calculate-service} stets den \lstlinine{serving-layer-service} nutzt um den \lstinline{raw-data-service}, und damit die Datenbank, zu kontaktieren. Der \lstinline{calculate-service} verwaltet keine Art von Cache. Dies ist Teil der Bemühung die Komponenten weitestgehend stateless zu halten. Eine Skalierung von stateless Komponenten ist problemlos möglich. Die einzelnen Instanzen müssen in diesem Fall keine Informationen untereinander teilen und  konsistent halten. Letzteres reduziert die Komplexität der Anwendung. Um dennoch stateful Deployments anzulegen stellt Kubernetes Konzepte wie \textit{Stateful-Sets} zur Verfügung. Im Rahmen dieser Fallstudie wurden\textit{ Stateful-Sets} nicht betrachtet. 
+\subsection{Die Datenbank}
+Im Rahmen dieser Umsetzung wurde eine Redis Datenbank verwendet. Diese ist von Natur aus stateful. Im vorherigen Abschnitt wurde bereits erläutert, warum dies eine Herausforderung darstellt. Im Rahmen unserer Fallstudie wird die Datenbank nicht skaliert. Sie befindet sich in einem einzigen Deployment mit einem einzigen Pod. Dies ist natürlich in einem produktiv Environment nicht praktikabel. \\
+Unserer Umsetzung kann als Abwandlung eines Shared-Repositorys gesehen werden. Der \lstlinline{raw-data-service} stellt dabei das Shared Repository da. Der Redis-Pod den persistenten Speicher. Ein Nachteil dieses Vorgehens ist die fehlende Skalierbarkeit und die Datenbank als Single-Point-of-Failure.\\
+Redis bietet allerdings ein Master/Slave Modell an. Dieses nutzt sogenannte Hash-Slots. Jede der Redis Instanzen verwaltet dabei eine abgeschlossene Menge dieser Hash-Slots. Die Daten werden also effektiv unter den Redis-Instanzen verteilt. In der Umsetzung der Fallstudie wurde dieses Konzept nicht genutzt. \\
+Darüber hinaus muss angemerkt werden, dass die Datenbank auch nicht persistiert wird. Ein Neustart des Clusters führt zur Erstellung neuer Pods. Folglich wird auch eine neue Instanz der Datenbank angelegt. Auch hierfür wären Stateful-Sets von Kubernetes ein Lösungsansatz. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
