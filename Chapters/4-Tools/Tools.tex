@@ -92,8 +92,18 @@ Fleet ist ein ehemaliges Projekt von CoreOS. Es wurde in Go entwickelt und unter
 \subsection{Apache Mesos}
 Apache Mesos ist ein Open Source Cluster-Manager. Im Gegensatz zu den anderen Orchestratoren kann Apache Mesos nicht nur Container orchestrieren, sondern kann generell für das Verwalten von Anwendungen auf einem Cluster eingesetzt werden. Das Framework Marathon ist Teil von Apache Mesos und ist für die Container-Orchestration zuständig. Marathon ist in Scala geschrieben und bietet eine REST-Schnittstelle, über welche das Cluster verwaltet werden kann \cite{noauthor_marathon_2021}. Es werden Container in einem eigenen Mesos-Container-Format sowie Docker-Container unterstützt \cite{noauthor_mesosphere_2021}.
 
-\section{Managed Kubernetes Services}
-...
+\section{Cloud-Anbieter und Managed Kubernetes Services}
+Besitzt man selbst keine große Serverinfrastruktur, so bietet es sich an, für seine Cloud-Anwendungen auf Drittanbieter zurückzugreifen. Diese stellen ihre Hardwareressourcen als Service zur Verfügung und ermöglichen das Deployment von Cloud-Anwendungen auf deren Servern. Ein Cloud-Anbieter hat meist ein großes, verteiltes Netzwerk von Servern. Diese können von Kunden beliebig verwendet werden, um ihre Anwendungen zu deployen. Dabei wird die Anzahl der gemieteten Ressourcen meist automatisch an die Bedürfnisse der Kunden angepasst. Benötigt die Anwendung eines Kunden zum aktuellen Zeitpunkt gerade wenig Ressourcen, so werden auch nur die benötigten Ressourcen abgerechnet, wodurch der Kunde nie für unnötig viele Ressourcen zahlen muss. Außerdem können die Ressourcen flexibel angepasst werden, wodurch automatisch mehr Ressourcen zur Verfügung gestellt werden, wenn eine Anwendung diese benötigt. All das wird mit Hilfe von Container-Orchestratoren realisiert.
+\\\\
+Zu den bekanntesten Cloud-Anbietern zählt Google mit ihrer Google-Cloud, Amazon mit Amazon Web Services (AWS), Microsoft mit Azure und IBM mit der IBM Cloud. Sie alle unterstützen Kubernetes als Container-Orchestrator, bieten hierfür aber jeweils noch eigene Managed Kubernetes Services an.
+\\\\
+Ein Managed Kubernetes Service erleichtert das Arbeiten mit Kubernetes und bietet dem Kunden eine vereinfachte Schnittstelle zu seinem Kubernetes-Cluster. Diese Schnittstelle ist meist auf den jeweiligen Cloud-Anbieter zugeschnitten und bietet abhängig von diesem unterschiedliche Funktionalitäten. Oftmals werden hier beispielsweise kompliziertere Konfigurationen automatisiert, wodurch das Aufsetzen eines Clusters vereinfacht wird. Fast alle großen Cloudanbieter bieten eigene Managed Kubernetes Services an, so hat Google für ihre Cloud beispielsweise die Google Kubernetes Engine (GKE), Amazon bietet für AWS Kunden den Amazon Elastic Kubernetes Service (EKS) an, Microsoft hat den Azure Kubernetes Service (AKS) und IBMs Service heißt IBM Cloud Kubernetes Service.
 \section{Nutzung in der Industrie}
-...
+Es gibt in der Industrie viele Anwendungsfälle für Cloud-Native-Applikationen. Grundlegend kann man sagen, dass eine Anwendung immer für die Cloud geeignet ist, wenn sie sich ihre Anforderungen mit den typischen Anforderungen von Cloud-Applikationen überdecken. Dabei handelt es sich also um Applikationen, die unter anderem einen großen Wert auf Resilienz, Skalierbarkeit und Elastizität legen.
+\\\\
+Dies trifft besonders häufig auf Online-Dienste zu, wie beispielsweise Webseiten. So sind die meisten größeren Webseiten in der Cloud gehostet. Amazon verwendet beispielsweise ihre eigene Cloud für das Hosten ihres Online-Shop und anderer von ihnen angebotenen Dienste \cite{noauthor_amazon_2021}. Ein weiteres Beispiel wäre Airbnb, welche ebenfalls AWS als Infrastruktur verwenden \cite{noauthor_airbnb_2021}.
+\\\\
+Die weltweit größten Streaminganbieter verwenden ebenfalls Cloud-Technologien für das Streaming ihrer Filme und Serien. Amazon nutzt für ihr hauseigenes Prime Video ihre Cloud-Infrastruktur. Auch Netflix zählt zu den bekannteren Kunden von AWS \cite{noauthor_netflix_2021}.
+\\\\
+Hierbei handelt es sich jedoch nur um einige wenige Beispiele für Applikationen, welche eine Cloud-Technologien verwenden. In der Industrie wird die Cloud für das Deployment von Anwendungen immer verbreiteter, da Online-Dienste in den letzten Jahren zunehmend an Beliebtheit und Nutzern gewonnen haben.
 
