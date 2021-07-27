@@ -11,6 +11,8 @@ Saarlandes im Studiengang Praktische Informatik der Fakultät für Ingenieurwiss
 
 #### Saarbrücken, 22. März 2021
 
+## Vorwort
+Der Source-Code kann [in der Github Gruppe](https://github.com/htw-swa-jk-nk-ns) eingesehen werden.
 
 ## Inhaltsverzeichnis
 
